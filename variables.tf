@@ -41,7 +41,7 @@ variable "zones" {
 }
 variable "kubelet_disk_type" {
   type    = string
-  default = null
+  default = "OS"
 }
 variable "max_count" {
   type    = number

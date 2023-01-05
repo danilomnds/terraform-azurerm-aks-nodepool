@@ -34,12 +34,14 @@ You can edit this file in order to reflect your patterns.
 ```hcl
 module "npuser1" {
   source = "git::https://github.com/danilomnds/terraform-azurerm-aks-nodepool?ref=v1.0.0"
+  subnet_id = <subnet id>
   poolname     = "<node pool name>"
   # here you can reffer a cluster created using the module https://github.com/danilomnds/terraform-azurerm-aks. Ex: module.<cluster-name>.id
   cluster_id = "<cluster_id>"
   vm_size  = "<node pool shape>"
   min_count = 2
   max_count = 6
+  os_disk_size_gb = 64
   tags     = {
     area = "infrastructure"
   }
@@ -48,6 +50,8 @@ output "node_id" {
   value = module.npuser1.id
 }
 ```
+
+## Input variables
 
 ## Input variables
 
@@ -62,12 +66,12 @@ output "node_id" {
 | host_encryption | should the nodes in this node pool have host encryption enabled? | `bool` | `false` | No |
 | eviction_policy | vmss eviction policy delete or dealocatte | `string` | `null` | No |
 | mode | node pool mode user or system | `string` | `User` | No |
+| fips_enabled | should the nodes in this node pool have federal information processing standard enabled | `bool` | `false` | No |
 | zones | define which zones will be used | `list()` | `["1","2","3"]` | No |
-| kubelet_disk_type | type of disk used by kubelet | `string` | `null` | No |
+| kubelet_disk_type | type of disk used by kubelet | `string` | `OS` | No |
 | max_count | maximum number of nodes when autoscaling=true | `number` | `null` | No |
 | min_count | minimum number of nodes when autoscaling=true | `number` | `null` | No |
 | max_pods | maximum number of pods of a node | `number` | `110` | No |
-| disk_type | text | `string` | `null` | Não |
 | labels | define node pool labels | `map(string)` | `{}` | No |
 | taints | list of Kubernetes taints which should be applied to nodes in the agent pool | `list(string)` | `[]` | No |
 | orchestrator_version | kubernetes version | `string` | `latest recommended version` | No |
