@@ -12,7 +12,6 @@ resource "azurerm_kubernetes_cluster_node_pool" "nodepool" {
     for_each = var.kubelet_config != null ? [var.kubelet_config] : []
     content {
       allowed_unsafe_sysctls    = lookup(kubelet_config.value, "allowed_unsafe_sysctls", null)
-      container_log_max_line    = lookup(kubelet_config.value, "container_log_max_line", null)
       container_log_max_size_mb = lookup(kubelet_config.value, "container_log_max_size_mb", null)
       cpu_cfs_quota_enabled     = lookup(kubelet_config.value, "cpu_cfs_quota_enabled", null)
       cpu_cfs_quota_period      = lookup(kubelet_config.value, "cpu_cfs_quota_period", null)
@@ -26,9 +25,9 @@ resource "azurerm_kubernetes_cluster_node_pool" "nodepool" {
   dynamic "linux_os_config" {
     for_each = var.linux_os_config != null ? [var.linux_os_config] : []
     content {
-      swap_file_size_mb             = lookup(linux_os_config.value, "swap_file_size_mb", null)
-      transparent_huge_page_defrag  = lookup(linux_os_config.value, "transparent_huge_page_defrag", null)
-      transparent_huge_page_enabled = lookup(linux_os_config.value, "transparent_huge_page_enabled", null)
+      swap_file_size_mb            = lookup(linux_os_config.value, "swap_file_size_mb", null)
+      transparent_huge_page_defrag = lookup(linux_os_config.value, "transparent_huge_page_defrag", null)
+      transparent_huge_page        = lookup(linux_os_config.value, "transparent_huge_page", null)
       dynamic "sysctl_config" {
         for_each = linux_os_config.value.sysctl_config != null ? [linux_os_config.value.sysctl_config] : []
         content {
@@ -75,7 +74,7 @@ resource "azurerm_kubernetes_cluster_node_pool" "nodepool" {
     for_each = var.node_network_profile != null ? [var.node_network_profile] : []
     content {
       dynamic "allowed_host_ports" {
-        for_each = node_network_profile.value.allowed_host_ports != null ? [node_network_profile.value.allowed_host_ports] : []
+        for_each = node_network_profile.value.allowed_host_ports != null ? node_network_profile.value.allowed_host_ports : []
         content {
           port_start = lookup(allowed_host_ports.value, "port_start", null)
           port_end   = lookup(allowed_host_ports.value, "port_end", null)
@@ -109,6 +108,8 @@ resource "azurerm_kubernetes_cluster_node_pool" "nodepool" {
       drain_timeout_in_minutes      = lookup(upgrade_settings.value, "drain_timeout_in_minutes", 30)
       node_soak_duration_in_minutes = lookup(upgrade_settings.value, "node_soak_duration_in_minutes", 0)
       max_surge                     = upgrade_settings.value.max_surge
+      max_unavailable               = lookup(upgrade_settings.value, "max_unavailable", null)
+      undrainable_node_behavior     = lookup(upgrade_settings.value, "undrainable_node_behavior", null)
     }
   }
   vnet_subnet_id = var.vnet_subnet_id

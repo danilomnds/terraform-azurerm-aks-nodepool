@@ -11,6 +11,7 @@ Module developed to standardize the AKS node pool creation.
 |----------------|-------------------| --------------- |
 | v1.0.0         | v1.3.6            | 3.37.0          |
 | v2.0.0         | v1.12.2           | 4.40.0          |
+| v2.1.0         | v1.15.8           | 4.81.0          |
 
 ## Release Notes
 
@@ -18,6 +19,7 @@ Module developed to standardize the AKS node pool creation.
 |----------------|------|
 | v1.0.0         | Initial Version |
 | v2.0.0         | update to support azurerm 4.40.0, rename of variables for standardization |
+| v2.1.0         | update to support azurerm 4.81.0 and Terraform 1.15.8; removed deprecated kubelet setting and fixed nodepool mappings |
 
 ## Specifying a version
 
@@ -41,7 +43,7 @@ You can edit this file in order to reflect your patterns.
 ## Use case
 ```hcl
 module "npuser1" {
-  source = "git::https://github.com/danilomnds/terraform-azurerm-aks-nodepool?ref=v2.0.0"
+  source = "git::https://github.com/danilomnds/terraform-azurerm-aks-nodepool?ref=v2.1.0"
   name     = "<node pool name>"  
   kubernetes_cluster_id = "<kubernetes_cluster_id>"
   vnet_subnet_id = <subnet id>
@@ -67,7 +69,7 @@ output "node_id" {
 | vm_size | node pool shape | `string` | n/a | `Yes` |
 | capacity_reservation_group_id |  specifies the id of the capacity reservation group where this node pool should exist | `string` | n/a | No |
 | auto_scaling_enabled | enables the node pool autoscaling | `bool` | `true` | No |
-| node_count | minimum number of nodes when auto_scaling=true and total number of nodes when autoscaling=false | `string` | `1` | No |
+| node_count | minimum number of nodes when auto_scaling=true and total number of nodes when autoscaling=false | `number` | `1` | No |
 | max_count | maximum number of nodes when autoscaling=true | `number` | `null` | No |
 | min_count | minimum number of nodes when autoscaling=true | `number` | `null` | No |
 | host_encryption_enabled | should the nodes in this node pool have host encryption enabled | `bool` | `false` | No |
@@ -105,9 +107,6 @@ output "node_id" {
 | windows_profile | block as defined in the official documentation | `object(map(string))` | n/a | No |
 | workload_runtime | used to specify the workload runtime | `string` | n/a | No |
 | zones | define which zones will be used | `list()` | `["1","2","3"]` | No |
-| node_count | minimum number of nodes when auto_scaling=true and total number of nodes when autoscaling=false | `string` | `1` | No |
-| max_count | maximum number of nodes when autoscaling=true | `number` | `null` | No |
-| min_count | minimum number of nodes when autoscaling=true | `number` | `null` | No |
 
 ## Output variables
 

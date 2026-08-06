@@ -43,7 +43,6 @@ variable "host_group_id" {
 variable "kubelet_config" {
   type = object({
     allowed_unsafe_sysctls    = optional(list(string))
-    container_log_max_line    = optional(number)
     container_log_max_size_mb = optional(number)
     cpu_cfs_quota_enabled     = optional(bool)
     cpu_cfs_quota_period      = optional(string)
@@ -58,9 +57,9 @@ variable "kubelet_config" {
 
 variable "linux_os_config" {
   type = object({
-    swap_file_size_mb             = optional(number)
-    transparent_huge_page_defrag  = optional(string)
-    transparent_huge_page_enabled = optional(string)
+    swap_file_size_mb            = optional(number)
+    transparent_huge_page_defrag = optional(string)
+    transparent_huge_page        = optional(string)
     sysctl_config = optional(object({
       fs_aio_max_nr                      = optional(number)
       fs_file_max                        = optional(number)
@@ -229,6 +228,8 @@ variable "upgrade_settings" {
     drain_timeout_in_minutes      = optional(number)
     node_soak_duration_in_minutes = optional(number)
     max_surge                     = string
+    max_unavailable               = optional(string)
+    undrainable_node_behavior     = optional(string)
   })
   default = null
 }
@@ -256,7 +257,7 @@ variable "zones" {
 }
 
 variable "node_count" {
-  type    = string
+  type    = number
   default = 1
 }
 
