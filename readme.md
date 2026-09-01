@@ -12,6 +12,7 @@ Module developed to standardize the AKS node pool creation.
 | v1.0.0         | v1.3.6            | 3.37.0          |
 | v2.0.0         | v1.12.2           | 4.40.0          |
 | v2.1.0         | v1.15.8           | 4.81.0          |
+| v5.3.0         | v1.16.0           | 5.3.0           |
 
 ## Release Notes
 
@@ -20,6 +21,7 @@ Module developed to standardize the AKS node pool creation.
 | v1.0.0         | Initial Version |
 | v2.0.0         | update to support azurerm 4.40.0, rename of variables for standardization |
 | v2.1.0         | update to support azurerm 4.81.0 and Terraform 1.15.8; removed deprecated kubelet setting and fixed nodepool mappings |
+| v5.3.0         | update to support AzureRM 5.3.0 and Terraform 1.16.0; support multiple allowed host port ranges |
 
 ## Specifying a version
 
@@ -43,7 +45,7 @@ You can edit this file in order to reflect your patterns.
 ## Use case
 ```hcl
 module "npuser1" {
-  source = "git::https://github.com/danilomnds/terraform-azurerm-aks-nodepool?ref=v2.1.0"
+  source = "git::https://github.com/danilomnds/terraform-azurerm-aks-nodepool?ref=v5.3.0"
   name     = "<node pool name>"  
   kubernetes_cluster_id = "<kubernetes_cluster_id>"
   vnet_subnet_id = <subnet id>
@@ -118,3 +120,15 @@ output "node_id" {
 
 Terraform AKS Node Pool: [https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/kubernetes_cluster_node_pool) <br>
 Eviction Policy: [https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/use-spot#eviction-policy](https://learn.microsoft.com/en-us/azure/virtual-machine-scale-sets/use-spot#eviction-policy)
+
+## Release Notes
+
+### [v5.3.0] - 2026-09-01
+
+#### Changed
+- Updated the AzureRM provider requirement to `>= 5.3.0`.
+- Updated the Terraform CLI requirement to `>= 1.16.0`.
+- Updated `node_network_profile.allowed_host_ports` to accept multiple port-range blocks, as supported by AzureRM 5.3.0.
+
+#### Verified
+- Confirmed the module's existing node pool arguments remain supported by AzureRM 5.3.0.
